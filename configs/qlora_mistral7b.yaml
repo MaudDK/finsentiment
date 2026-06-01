@@ -1,0 +1,77 @@
+# ── Model ─────────────────────────────────────────────────────────────────────
+model:
+  # The base model we're fine-tuning. Mistral-7B-Instruct is already
+  # instruction-tuned, so it understands the [INST] prompt format we'll use.
+  base_model: "mistralai/Mistral-7B-Instruct-v0.2"
+
+  # Where the trained LoRA adapter weights get saved after training.
+  # Only ~30MB saved here — NOT the full 14GB model.
+  output_dir: "outputs/"
+
+# ── LoRA ──────────────────────────────────────────────────────────────────────
+lora:
+  # Rank — the bottleneck width of the two adapter matrices A and B.
+  # Lower = fewer params, faster, less VRAM. Higher = more capacity, better fit.
+  # 16 is the standard starting point for a 7B model.
+  r: 16
+
+  # Scaling factor applied to the adapter output before adding to frozen weights.
+  # Formula: (alpha / r) × BA. Convention is to set this to 2× rank.
+  alpha: 32
+
+  # Randomly zeros out adapter activations during training.
+  # Prevents memorising the small FinancialPhraseBank dataset. 0.05 = 5% dropout.
+  dropout: 0.05
+
+  # Which weight matrices inside the transformer get LoRA adapters attached.
+  # q/k/v/o = attention projections (what to attend to)
+  # gate/up/down = MLP projections (what to output)
+  # Training all 7 gives the best quality for a classification task.
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+# ── Quantization ──────────────────────────────────────────────────────────────
+quantization:
+  # Load model weights in 4-bit instead of 16-bit.
+  # Reduces VRAM from ~28GB → ~4GB. Makes 7B models trainable on 16GB GPUs.
+  bits: 4
+
+  # The dtype used for actual math operations (matrix multiplications).
+  # bfloat16 is faster and more stable than float16 on Ampere+ GPUs (3090, 4090, A100).
+  compute_dtype: "bfloat16"
+
+  # The 4-bit quantization format. NormalFloat4 preserves more information
+  # than standard int4 because it's designed for normally-distributed weights.
+  quant_type: "nf4"
+
+  # Quantizes the quantization constants themselves. Saves an extra ~0.4GB VRAM.
+  # Almost always worth keeping true.
+  double_quant: true
+
+# ── Training ──────────────────────────────────────────────────────────────────
+training:
+  # Number of full passes through the training data.
+  # 3 is the sweet spot for FinancialPhraseBank — more risks overfitting.
+  epochs: 3
+
+  # ⚠️  16 is too large for QLoRA on 16GB VRAM — reduce to 4.
+  # Use gradient_accumulation: 4 to keep effective batch size = 16
+  # without needing 16 samples in VRAM at once.
+  batch_size: 4
+  gradient_accumulation: 4   # effective batch = batch_size × gradient_accumulation
+
+  # How fast the optimizer updates the adapter weights.
+  # 2e-4 is the standard for QLoRA. 1e-4 is slightly conservative but fine.
+  learning_rate: 1e-4
+
+# ── Data ──────────────────────────────────────────────────────────────────────
+data:
+  dataset_name: "baptle/financial_headlines_market_based"
+  test_size: 0.2
+  processed_dir: "data/processed"
