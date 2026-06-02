@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Data & models — too large for git
+/data/
+outputs/
+logs/
+
+# Secrets
+.env
+git_workflow.md
+
+# Jupyter
+.ipynb_checkpoints/
+.gitignore st

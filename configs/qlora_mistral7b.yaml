@@ -38,6 +38,7 @@ lora:
 
 # ── Quantization ──────────────────────────────────────────────────────────────
 quantization:
+  quantize: true
   # Load model weights in 4-bit instead of 16-bit.
   # Reduces VRAM from ~28GB → ~4GB. Makes 7B models trainable on 16GB GPUs.
   bits: 4
@@ -60,7 +61,7 @@ training:
   # 3 is the sweet spot for FinancialPhraseBank — more risks overfitting.
   epochs: 3
 
-  # ⚠️  16 is too large for QLoRA on 16GB VRAM — reduce to 4.
+  # 16 is too large for QLoRA on 16GB VRAM — reduce to 4.
   # Use gradient_accumulation: 4 to keep effective batch size = 16
   # without needing 16 samples in VRAM at once.
   batch_size: 4
@@ -74,4 +75,6 @@ training:
 data:
   dataset_name: "baptle/financial_headlines_market_based"
   test_size: 0.2
+  shuffle: true
+  seed: 42
   processed_dir: "data/processed"
