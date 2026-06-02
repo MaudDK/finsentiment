@@ -48,7 +48,3 @@ def load_model(config_path: str, inference: bool = False):
         tokenizer.pad_token = tokenizer.eos_token
 
     return model, tokenizer
-
-if __name__ == "__main__":
-    model, tokenizer = load_model("./configs/qlora_mistral7b.yaml", inference=False)
-    print(model.config)
