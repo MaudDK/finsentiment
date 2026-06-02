@@ -70,6 +70,9 @@ training:
   # How fast the optimizer updates the adapter weights.
   # 2e-4 is the standard for QLoRA. 1e-4 is slightly conservative but fine.
   learning_rate: 1e-4
+  max_seq_length: 256
+  wandb_project: "finsentinel"
+  wandb_run_name: "mistral-7b-finance-sentiment"
 
 # ── Data ──────────────────────────────────────────────────────────────────────
 data:
