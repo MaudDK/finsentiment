@@ -1,5 +1,7 @@
 from datasets import load_dataset, ClassLabel, DatasetDict
-from finsentiment.config import load_config
+from finsentiment.config import load_config, authenticate_hf
+
+authenticate_hf()
 
 def load_financial_phrase_bank(config_path: str) -> DatasetDict:
     """
