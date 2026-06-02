@@ -1,6 +1,5 @@
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from finsentiment.config import load_config
-from finsentiment.model.loader import load_model
 
 def build_lora_config(config_path: str) -> LoraConfig:
     config = load_config(config_path)
