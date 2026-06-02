@@ -1,10 +1,7 @@
-import os
 from finsentiment.config import load_config, authenticate_hf
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from huggingface_hub import login
 import torch
 
-authenticate_hf()
 
 DTYPE_MAP = {
     "bfloat16": torch.bfloat16,
@@ -28,6 +25,7 @@ def build_bnb_config(quant_config) -> BitsAndBytesConfig:
             load_in_8bit=True,
         )
 def load_model(config_path: str, inference: bool = False):
+    authenticate_hf()
     config = load_config(config_path)
     base_model = config['model']['base_model']
     quantization_config = config['quantization']

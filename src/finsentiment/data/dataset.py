@@ -1,8 +1,6 @@
 from datasets import load_dataset, ClassLabel, DatasetDict
 from finsentiment.config import load_config, authenticate_hf
 
-authenticate_hf()
-
 def load_financial_phrase_bank(config_path: str) -> DatasetDict:
     """
     Load and prepare the financial sentiment dataset for fine-tuning.
@@ -14,6 +12,8 @@ def load_financial_phrase_bank(config_path: str) -> DatasetDict:
         DatasetDict with 'train' and 'test' splits, containing
         'messages' (list of dicts) and 'label' (ClassLabel) columns.
     """
+
+    authenticate_hf()
     config = load_config(config_path)
 
     test_size = config['data']['test_size']

@@ -1,9 +1,8 @@
+import warnings
 import yaml
 import os
 from dotenv import load_dotenv
 from huggingface_hub import login
-
-load_dotenv()
 
 def load_config(config_path):
     if not os.path.exists(config_path):
@@ -17,11 +16,12 @@ def load_config(config_path):
             raise ValueError(f"Failed to load YAML: {e}")
 
 def authenticate_hf():
+    load_dotenv()
     hf_token = os.getenv("HUGGING_FACE_TOKEN")
     if hf_token:
         login(token=hf_token)
     else:
-        print("Warning: No HuggingFace token found in .env")
+        warnings.warn("Warning: No HuggingFace token found in .env")
 
 
 if __name__ == "__main__":
