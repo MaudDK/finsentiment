@@ -71,8 +71,10 @@ def train(config_path: str):
 
     trainer = build_trainer(model, tokenizer, dataset, config)
 
-    trainer.train()
-    wandb.finish()
+    try:
+        trainer.train()
+    finally:
+        wandb.finish()
 
     output_dir = config['model']['output_dir']
     trainer.model.save_pretrained(output_dir)
