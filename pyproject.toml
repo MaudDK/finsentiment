@@ -20,7 +20,8 @@ dependencies = [
     "trl",
     "wandb",
     "tqdm",
-    "scikit-learn"
+    "scikit-learn",
+    "huggingface-hub",
 ]
 
 [tool.setuptools.packages.find]
