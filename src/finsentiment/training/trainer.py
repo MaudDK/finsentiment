@@ -1,5 +1,5 @@
 from finsentiment.model.loader import load_model
-from finsentiment.config import load_config
+from finsentiment.config import load_config, authenticate_wandb
 from finsentiment.model.loras import build_lora_config, apply_lora
 from finsentiment.data.dataset import load_financial_phrase_bank
 from datasets import DatasetDict
@@ -17,8 +17,6 @@ def apply_chat_template(dataset, tokenizer) -> DatasetDict:
         return row
     return dataset.map(format_row)
 
-
-
 def build_trainer(model, tokenizer, dataset, config):
 
     sft_config = SFTConfig(
@@ -27,11 +25,12 @@ def build_trainer(model, tokenizer, dataset, config):
         per_device_train_batch_size = config['training']['batch_size'],
         gradient_accumulation_steps = config['training']['gradient_accumulation'],
         learning_rate = config['training']['learning_rate'],
-        bf16 = True,
+        bf16 = config['training']['bf16'],
         logging_steps = 10,
         save_strategy = "epoch",
+        eval_strategy="epoch",
         dataset_text_field = "text",
-        max_seq_length = config['training']['max_seq_length'],
+        max_length = config['training']['max_length'],
         report_to = "wandb",
         run_name = config['training']['wandb_run_name'],
     )
@@ -46,12 +45,10 @@ def build_trainer(model, tokenizer, dataset, config):
 
     return trainer
 
-
-
 def train(config_path: str):
     # Load config
     config = load_config(config_path)
-
+    authenticate_wandb()
     wandb.init(
         project=config['training']['wandb_project'], 
         name=config['training']['wandb_run_name']

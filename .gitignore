@@ -11,6 +11,7 @@ build/
 /data/
 outputs/
 logs/
+wandb/
 
 # Secrets
 .env
@@ -19,3 +20,4 @@ git_workflow.md
 # Jupyter
 .ipynb_checkpoints/
 .gitignore st
+

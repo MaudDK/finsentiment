@@ -66,11 +66,12 @@ training:
   # without needing 16 samples in VRAM at once.
   batch_size: 4
   gradient_accumulation: 4   # effective batch = batch_size × gradient_accumulation
+  bf16: true
 
   # How fast the optimizer updates the adapter weights.
   # 2e-4 is the standard for QLoRA. 1e-4 is slightly conservative but fine.
-  learning_rate: 1e-4
-  max_seq_length: 256
+  learning_rate: 0.0001
+  max_length: 256
   wandb_project: "finsentinel"
   wandb_run_name: "mistral-7b-finance-sentiment"
 
