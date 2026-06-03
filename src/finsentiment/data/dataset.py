@@ -71,9 +71,3 @@ def load_financial_phrase_bank(config_path: str) -> DatasetDict:
     )
 
     return dataset
-
-
-if __name__ == "__main__":
-    config_path = "configs/qlora_mistral7b.yaml"
-    dataset = load_financial_phrase_bank(config_path)
-    print(dataset['test'][0])
