@@ -1,4 +1,4 @@
-# FinSentinel
+# FinSentiment
 
 QLoRA fine-tuning of Mistral-7B for financial sentiment analysis. Classifies financial headlines as **positive**, **neutral**, or **negative** using 4-bit quantization — runs on a single 16GB GPU.
 
@@ -23,7 +23,7 @@ QLoRA fine-tuning of Mistral-7B for financial sentiment analysis. Classifies fin
 ## Project Structure
 
 ```
-finsentinel/
+finsentiment/
 ├── src/
 │   └── finsentiment/
 │       ├── config.py               # YAML config loader + HF/W&B auth
@@ -51,8 +51,8 @@ finsentinel/
 ## Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/finsentinel
-cd finsentinel
+git clone https://github.com/YOUR_USERNAME/finsentiment
+cd finsentiment
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
@@ -82,7 +82,7 @@ python scripts/predict.py
 ```
 
 ```
-FinSentinel — Financial Sentiment Classifier
+FinSentiment — Financial Sentiment Classifier
 Type a financial headline to classify. Type 'quit' to exit.
 
 Headline: Apple reports record quarterly earnings beating analyst expectations
