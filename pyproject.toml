@@ -18,7 +18,9 @@ dependencies = [
     "bitsandbytes>=0.46.1",
     "peft",
     "trl",
-    "wandb"
+    "wandb",
+    "tqdm",
+    "scikit-learn"
 ]
 
 [tool.setuptools.packages.find]
