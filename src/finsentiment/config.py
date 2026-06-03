@@ -23,6 +23,13 @@ def authenticate_hf():
     else:
         warnings.warn("Warning: No HuggingFace token found in .env")
 
+def authenticate_wandb():
+    load_dotenv()
+    wandb_api_key = os.getenv("WANDB_API_KEY")
+    if wandb_api_key:
+       os.environ["WANDB_API_KEY"] = wandb_api_key
+    else:
+        warnings.warn("Warning: No Weights & Biases API key found in .env")
 
 if __name__ == "__main__":
     config = load_config("configs/qlora_mistral7b.yaml")
